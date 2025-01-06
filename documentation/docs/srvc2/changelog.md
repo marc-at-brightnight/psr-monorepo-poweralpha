@@ -4,6 +4,13 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.3.0 (2025-01-06)
+
+### Features
+
+- Let's give it one more try ([`e253a8c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/e253a8c6c826555ec9d2213590dccfe94fe049f5))
+
+
 ## v1.0.0 (2025-01-06)
 
 - Initial Release
