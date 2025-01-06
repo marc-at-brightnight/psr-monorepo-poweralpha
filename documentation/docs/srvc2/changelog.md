@@ -4,6 +4,23 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.2.0 (2025-01-06)
+
+### Chores
+
+- Fix comments in configuration ([`0a874b5`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/0a874b5b7a86f5c10b0403d670457d895c1411ea))
+
+### Documentation
+
+- **srvc2-changelog**: Add custom header to changelog ([`0db541d`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/0db541df59f18f0c14f55562a83e4af9be5e40c9))
+
+### Features
+
+- **srvc1-version**: Add version variable to service module ([`5d24983`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/5d24983d88b76e2d1c51706bb1fd5c24f66baf88))
+
+- **srvc2-version**: Add version variable to service module ([`a526b84`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/a526b84af2e2138abd2545b04cf5bb331bf20079))
+
+
 ## v1.1.0 (2025-01-05)
 
 ### Chores
