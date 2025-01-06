@@ -38,38 +38,38 @@ jobs:
             # so subsequent steps can reference them with steps.release-check.outputs.KEYNAME
             echo "$key=$val" >> $GITHUB_OUTPUT
           done
-      - name: Reset svc1 release check
-        if: steps.release-check.outputs.svc1 == 'true'
+      - name: Reset srvc1 release check
+        if: steps.release-check.outputs.srvc1 == 'true'
         run: |
-          yq e -i '.svc1 = false' semantic-release.yaml  # set the "svc1" entry to false
+          yq e -i '.srvc1 = false' semantic-release.yaml  # set the "srvc1" entry to false
           git add .
-          mkdir -p documentation/templates/documentation/docs/svc1
-          rsync -a documentation/templates/.base-changelog-template/ documentation/templates/documentation/docs/svc1/
-      - name: Create svc1 release
-        if: steps.release-check.outputs.svc1 == 'true'
+          mkdir -p documentation/templates/documentation/docs/srvc1
+          rsync -a documentation/templates/.base-changelog-template/ documentation/templates/documentation/docs/srvc1/
+      - name: Create srvc1 release
+        if: steps.release-check.outputs.srvc1 == 'true'
         uses: python-semantic-release/python-semantic-release@v9.15.2
         with:
-          directory: poweralpha/services/svc1
+          directory: poweralpha/services/srvc1
           changelog: true
           commit: true
           push: true
           tag: true
           vcs_release: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Reset svc2 release check
-        if: steps.release-check.outputs.svc2 == 'true'
+      - name: Reset srvc2 release check
+        if: steps.release-check.outputs.srvc2 == 'true'
         run: |
           git pull
           git reset --hard HEAD
-          yq e -i '.svc2 = false' semantic-release.yaml  # set the "svc2" entry to false
+          yq e -i '.srvc2 = false' semantic-release.yaml  # set the "srvc2" entry to false
           git add .
-          mkdir -p documentation/templates/documentation/docs/svc2
-          rsync -a documentation/templates/.base-changelog-template/ documentation/templates/documentation/docs/svc2/
-      - name: Create svc2 github release
-        if: steps.release-check.outputs.svc2 == 'true'
+          mkdir -p documentation/templates/documentation/docs/srvc2
+          rsync -a documentation/templates/.base-changelog-template/ documentation/templates/documentation/docs/srvc2/
+      - name: Create srvc2 github release
+        if: steps.release-check.outputs.srvc2 == 'true'
         uses: python-semantic-release/python-semantic-release@v9.15.2
         with:
-          directory: poweralpha/services/svc2
+          directory: poweralpha/services/srvc2
           changelog: true
           commit: true
           push: true
