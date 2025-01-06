@@ -40,10 +40,10 @@
 %}{#
 #}{%  if releases | length == 1 and mask_initial_release
 %}{#    # On a first release, generate our special message
-#}{%    include ".components/first_release.md.j2"
+#}{%    include ".base_changelog_template/.components/first_release.md.j2"
 %}{%  else
 %}{#    # Not the first release so generate notes normally
-#}{%    include ".components/versioned_changes.md.j2"
+#}{%    include ".base_changelog_template/.components/versioned_changes.md.j2"
 -%}{#
 #}{%    if detailed_changes_link is defined
 %}{{      "\n"
