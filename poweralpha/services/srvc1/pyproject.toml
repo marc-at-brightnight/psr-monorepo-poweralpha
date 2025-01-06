@@ -1,0 +1,8 @@
+[project]
+name = "srvc1"
+version = "0.0.0"
+
+[tool.semantic_release.changelog]
+template_dir = "../../../documentation/templates"
+mode = "update"
+exclude_commit_patterns = [".*\\[skip ci\\].*"]
