@@ -2,6 +2,9 @@
 name = "srvc2"
 version = "1.0.0"
 
+[project.scripts]
+srvc2 = "svrc2.__main__:main"
+
 [tool.semantic_release]
 commit_parser = "angular"
 commit_message = """\
