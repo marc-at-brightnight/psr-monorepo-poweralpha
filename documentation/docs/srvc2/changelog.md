@@ -1,5 +1,7 @@
 # CHANGELOG
 
+Published by codejedi365.
+
 <!-- version list -->
 
 ## v1.1.0 (2025-01-05)
