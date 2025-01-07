@@ -4,6 +4,14 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.6.2 (2025-01-07)
+
+### Bug Fixes
+
+- That was strange, let's try one more bug fix ([`27b4a67`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/27b4a6792c0e305c0ba3b667c084dfb1ce856575))
+    - Another double release
+
+
 ## v1.6.1 (2025-01-07)
 
 ### Bug Fixes
