@@ -41,10 +41,11 @@ jobs:
       - name: Reset srvc1 release check
         if: steps.release-check.outputs.srvc1 == 'true'
         run: |
+          rm -rf documentation/templates/documentation
           yq e -i '.srvc1 = false' semantic-release.yaml  # set the "srvc1" entry to false
           git add .
           mkdir -p documentation/templates/documentation/docs/srvc1
-          rsync -a documentation/templates/.base-changelog-template/ documentation/templates/documentation/docs/srvc1/
+          rsync -a documentation/templates/.base_changelog_template/ documentation/templates/documentation/docs/srvc1/
       - name: Create srvc1 release
         if: steps.release-check.outputs.srvc1 == 'true'
         uses: python-semantic-release/python-semantic-release@v9.15.2
@@ -61,10 +62,11 @@ jobs:
         run: |
           git pull
           git reset --hard HEAD
+          rm -rf documentation/templates/documentation
           yq e -i '.srvc2 = false' semantic-release.yaml  # set the "srvc2" entry to false
           git add .
           mkdir -p documentation/templates/documentation/docs/srvc2
-          rsync -a documentation/templates/.base-changelog-template/ documentation/templates/documentation/docs/srvc2/
+          rsync -a documentation/templates/.base_changelog_template/ documentation/templates/documentation/docs/srvc2/
       - name: Create srvc2 github release
         if: steps.release-check.outputs.srvc2 == 'true'
         uses: python-semantic-release/python-semantic-release@v9.15.2
