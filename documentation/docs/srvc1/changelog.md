@@ -4,6 +4,10 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.0.0 (2025-01-07)
+
+- Initial Release
+
 ## v1.2.0 (2025-01-06)
 
 ### Chores
