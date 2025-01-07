@@ -4,6 +4,16 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.4.0 (2025-01-07)
+
+### Features
+
+- Another feature, single new line this time ([`76e7bf7`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/76e7bf796d81a0016cef0e3a6e4c314193dae162))
+
+- Let's try one more time, with double new line ([`540de78`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/540de78211c65f6b8de5f51afbba727f50028972))
+    - test bullet
+
+
 ## v1.3.0 (2025-01-06)
 
 ### Features
