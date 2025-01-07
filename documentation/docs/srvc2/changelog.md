@@ -4,6 +4,14 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.6.1 (2025-01-07)
+
+### Bug Fixes
+
+- Test another double release ([`dd500a8`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/dd500a820e6191f57a97d2c068a8309255846808))
+    - this comment should be reflected in both changelogs
+
+
 ## v1.6.0 (2025-01-07)
 
 ### Features
