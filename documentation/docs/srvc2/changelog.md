@@ -4,6 +4,14 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.6.0 (2025-01-07)
+
+### Features
+
+- Test double release ([`79aab0a`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/79aab0ac422828e38ee8ebc0b112a40d1a2a755f))
+    - This is double release
+
+
 ## v1.5.0 (2025-01-07)
 
 ### Features

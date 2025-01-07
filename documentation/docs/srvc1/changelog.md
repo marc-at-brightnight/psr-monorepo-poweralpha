@@ -4,7 +4,40 @@ Published by codejedi365.
 
 <!-- version list -->
 
-## v1.0.0 (2025-01-07)
+## v1.6.0 (2025-01-07)
+
+### Features
+
+- Test double release ([`79aab0a`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/79aab0ac422828e38ee8ebc0b112a40d1a2a755f))
+    - This is double release
+
+
+## v1.5.0 (2025-01-07)
+
+### Features
+
+- Another test, with double bullet and jira ticket number ([`67b611c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/67b611cc81a970d68ddd568c8aab4d9912a181d6))
+    - test bullet
+
+
+## v1.4.0 (2025-01-07)
+
+### Features
+
+- Another feature, single new line this time ([`76e7bf7`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/76e7bf796d81a0016cef0e3a6e4c314193dae162))
+
+- Let's try one more time, with double new line ([`540de78`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/540de78211c65f6b8de5f51afbba727f50028972))
+    - test bullet
+
+
+## v1.3.0 (2025-01-06)
+
+### Features
+
+- Let's give it one more try ([`e253a8c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/e253a8c6c826555ec9d2213590dccfe94fe049f5))
+
+
+## v1.0.0 (2025-01-06)
 
 - Initial Release
 
@@ -16,7 +49,7 @@ Published by codejedi365.
 
 ### Documentation
 
-- **srvc1-changelog**: Add custom header to changelog ([`f194cb3`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/f194cb335b2bf8c1b8391b9f379735e422e4ea34))
+- **srvc2-changelog**: Add custom header to changelog ([`0db541d`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/0db541df59f18f0c14f55562a83e4af9be5e40c9))
 
 ### Features
 
@@ -29,11 +62,11 @@ Published by codejedi365.
 
 ### Chores
 
-- **srvc1-scripts**: Add release automation script ([`db7138b`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/db7138b3be7704620ca1ecdd6fa9eb14edd3f5c0))
+- **srvc2-scripts**: Add release automation script ([`6359724`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/635972414dc98ace403bf39a279bd629a3518726))
 
 ### Documentation
 
-- **srvc1-readme**: Update readme for service 1 ([`8e288f6`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/8e288f65a9e5ce77cdda6506176263aa0cba4966))
+- **srvc2-readme**: Update readme for service 2 ([`c88a57c`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/c88a57c1593725080a9dd05dfd68096cd0d49777))
 
 ### Features
 
