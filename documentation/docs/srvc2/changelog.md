@@ -4,6 +4,14 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.5.0 (2025-01-07)
+
+### Features
+
+- Another test, with double bullet and jira ticket number ([`67b611c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/67b611cc81a970d68ddd568c8aab4d9912a181d6))
+    - test bullet
+
+
 ## v1.4.0 (2025-01-07)
 
 ### Features
