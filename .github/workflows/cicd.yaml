@@ -1,0 +1,109 @@
+# Run unit and integration tests for CI
+# Build any branch that passes CI as a docker image
+# Push a docker image tagged with the git hash and branch name
+# For PR's, display the option to deploy to the test env
+# For merges to main, display the option to deploy to the dev env
+# The environments are configured in the GitHub repo settings
+
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  releases:
+    name: Release all Github packages
+#    needs: [deploy-to-prod]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history so semantic-release can resolve commits
+          token: ${{ secrets.CICD_RELEASE_GITHUB_TOKEN }}
+      - name: Install yq
+        uses: mikefarah/yq@master
+        with:
+          cmd: ""
+      - name: Parse semantic-release.yaml
+        id: release-check
+        run: |
+          for key in $(yq e 'keys | .[]' semantic-release.yaml); do
+            val=$(yq e ".$key" semantic-release.yaml)
+
+            echo "$key: $val"
+
+            # Write each key=value pair to GitHub Actions output
+            # so subsequent steps can reference them with steps.release-check.outputs.KEYNAME
+            echo "$key=$val" >> $GITHUB_OUTPUT
+          done
+      - name: Reset srvc1 release check
+        if: steps.release-check.outputs.srvc1 == 'true'
+        run: |
+          rm -rf documentation/templates/documentation
+          yq e -i '.srvc1 = false' semantic-release.yaml  # set the "srvc1" entry to false
+          git add .
+          mkdir -p documentation/templates/documentation/docs/srvc1
+          rsync -a documentation/templates/.base_changelog_template/ documentation/templates/documentation/docs/srvc1/
+      - name: Create srvc1 release
+        if: steps.release-check.outputs.srvc1 == 'true'
+        uses: python-semantic-release/python-semantic-release@v9.15.2
+        with:
+          directory: poweralpha/services/srvc1
+          changelog: true
+          commit: true
+          push: true
+          tag: true
+          vcs_release: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Reset srvc2 release check
+        if: steps.release-check.outputs.srvc2 == 'true'
+        run: |
+          git pull
+          git reset --hard HEAD
+          rm -rf documentation/templates/documentation
+          yq e -i '.srvc2 = false' semantic-release.yaml  # set the "srvc2" entry to false
+          git add .
+          mkdir -p documentation/templates/documentation/docs/srvc2
+          rsync -a documentation/templates/.base_changelog_template/ documentation/templates/documentation/docs/srvc2/
+      - name: Create srvc2 github release
+        if: steps.release-check.outputs.srvc2 == 'true'
+        uses: python-semantic-release/python-semantic-release@v9.15.2
+        with:
+          directory: poweralpha/services/srvc2
+          changelog: true
+          commit: true
+          push: true
+          tag: true
+          vcs_release: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          root_options: "-vv"
+      - name: Check if any services are marked for release
+        id: check-any-true
+        run: |
+          git pull
+          git reset --hard HEAD
+          # This command returns all boolean fields that are set to true.
+          count=$(yq e '[.. | select(tag=="!!bool" and . == true)] | length' semantic-release.yaml)
+
+          if [ "$count" -gt 0 ]; then
+            echo "There is at least one service set to true (count=$count)."
+            echo "any_true=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any_true=false" >> "$GITHUB_OUTPUT"
+            echo "All services are false."
+          fi
+      - name: Revert semantic-release
+        if: ${{ steps.check-any-true.outputs.any_true == 'true' }}
+        run: |
+          # Reverts all to false
+          yq e -i '(.[] | select(tag == "!!bool")) = false' semantic-release.yaml
+          
+          # Configure git for committing
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Commit and push the change
+          git commit -am "Revert semantic-release warning [skip ci]"
+          git push

@@ -4,6 +4,59 @@ Published by codejedi365.
 
 <!-- version list -->
 
+## v1.6.2 (2025-01-07)
+
+### Bug Fixes
+
+- That was strange, let's try one more bug fix ([`27b4a67`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/27b4a6792c0e305c0ba3b667c084dfb1ce856575))
+    - Another double release
+
+
+## v1.6.1 (2025-01-07)
+
+### Bug Fixes
+
+- Test another double release ([`dd500a8`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/dd500a820e6191f57a97d2c068a8309255846808))
+    - this comment should be reflected in both changelogs
+
+
+## v1.6.0 (2025-01-07)
+
+### Features
+
+- Test double release ([`79aab0a`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/79aab0ac422828e38ee8ebc0b112a40d1a2a755f))
+    - This is double release
+
+
+## v1.5.0 (2025-01-07)
+
+### Features
+
+- Another test, with double bullet and jira ticket number ([`67b611c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/67b611cc81a970d68ddd568c8aab4d9912a181d6))
+    - test bullet
+
+
+## v1.4.0 (2025-01-07)
+
+### Features
+
+- Another feature, single new line this time ([`76e7bf7`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/76e7bf796d81a0016cef0e3a6e4c314193dae162))
+
+- Let's try one more time, with double new line ([`540de78`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/540de78211c65f6b8de5f51afbba727f50028972))
+    - test bullet
+
+
+## v1.3.0 (2025-01-06)
+
+### Features
+
+- Let's give it one more try ([`e253a8c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/e253a8c6c826555ec9d2213590dccfe94fe049f5))
+
+
+## v1.0.0 (2025-01-06)
+
+- Initial Release
+
 ## v1.2.0 (2025-01-06)
 
 ### Chores
