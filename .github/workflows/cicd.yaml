@@ -7,10 +7,12 @@
 
 name: CI/CD
 
+
 on:
   push:
     branches:
       - '**'
+
 
 jobs:
   releases:
@@ -22,10 +24,12 @@ jobs:
         with:
           fetch-depth: 0  # Fetch all history so semantic-release can resolve commits
           token: ${{ secrets.CICD_RELEASE_GITHUB_TOKEN }}
+
       - name: Install yq
         uses: mikefarah/yq@master
         with:
           cmd: ""
+
       - name: Parse semantic-release.yaml
         id: release-check
         run: |
@@ -38,6 +42,7 @@ jobs:
             # so subsequent steps can reference them with steps.release-check.outputs.KEYNAME
             echo "$key=$val" >> $GITHUB_OUTPUT
           done
+
       - name: Reset srvc1 release check
         if: steps.release-check.outputs.srvc1 == 'true'
         run: |
@@ -46,9 +51,10 @@ jobs:
           git add .
           mkdir -p documentation/templates/documentation/docs/srvc1
           rsync -a documentation/templates/.base_changelog_template/ documentation/templates/documentation/docs/srvc1/
+
       - name: Create srvc1 release
         if: steps.release-check.outputs.srvc1 == 'true'
-        uses: python-semantic-release/python-semantic-release@v9.15.2
+        uses: python-semantic-release/python-semantic-release@v9.16.1
         with:
           directory: poweralpha/services/srvc1
           changelog: true
@@ -57,6 +63,7 @@ jobs:
           tag: true
           vcs_release: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Reset srvc2 release check
         if: steps.release-check.outputs.srvc2 == 'true'
         run: |
@@ -67,9 +74,10 @@ jobs:
           git add .
           mkdir -p documentation/templates/documentation/docs/srvc2
           rsync -a documentation/templates/.base_changelog_template/ documentation/templates/documentation/docs/srvc2/
+
       - name: Create srvc2 github release
         if: steps.release-check.outputs.srvc2 == 'true'
-        uses: python-semantic-release/python-semantic-release@v9.15.2
+        uses: python-semantic-release/python-semantic-release@v9.16.1
         with:
           directory: poweralpha/services/srvc2
           changelog: true
@@ -79,6 +87,7 @@ jobs:
           vcs_release: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           root_options: "-vv"
+
       - name: Check if any services are marked for release
         id: check-any-true
         run: |
@@ -94,12 +103,13 @@ jobs:
             echo "any_true=false" >> "$GITHUB_OUTPUT"
             echo "All services are false."
           fi
+
       - name: Revert semantic-release
         if: ${{ steps.check-any-true.outputs.any_true == 'true' }}
         run: |
           # Reverts all to false
           yq e -i '(.[] | select(tag == "!!bool")) = false' semantic-release.yaml
-          
+
           # Configure git for committing
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
