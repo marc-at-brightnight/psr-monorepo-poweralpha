@@ -4,16 +4,17 @@ import logging
 import os
 import re
 from fnmatch import fnmatch
-from pathlib import Path
 from functools import reduce
 from itertools import zip_longest
+from pathlib import Path
 from re import compile as regexp
 from typing import TYPE_CHECKING, Any, Iterable
 
-# typing_extensions is for Python 3.8, 3.9, 3.10 compatibility
-from typing_extensions import Annotated
 from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass
+
+# typing_extensions is for Python 3.8, 3.9, 3.10 compatibility
+from typing_extensions import Annotated
 
 from semantic_release.commit_parser._base import CommitParser, ParserOptions
 from semantic_release.commit_parser.angular import LONG_TYPE_NAMES
@@ -67,7 +68,9 @@ class ConventionalMonorepoParserOptions(ParserOptions):
     default_bump_level: LevelBump = LevelBump.NO_RELEASE
     """The minimum bump level to apply to valid commit message."""
 
-    path_filters: Annotated[tuple[Path, ...], Field(validate_default=True)] = (Path("."),)
+    path_filters: Annotated[tuple[Path, ...], Field(validate_default=True)] = (
+        Path("."),
+    )
     """
     A set of relative paths to filter commits by. Only commits with file changes that
     match these file paths or its subdirectories will be considered valid commits.
@@ -138,7 +141,9 @@ class ConventionalMonorepoParserOptions(ParserOptions):
                 # for our expected output. Due to the empty second array, we know the first is always longest
                 # and that means no values in the first entry of the tuples will ever be a LevelBump. We
                 # apply a str() to make mypy happy although it will never happen.
-                *zip_longest(self.other_allowed_tags, (), fillvalue=self.default_bump_level),
+                *zip_longest(
+                    self.other_allowed_tags, (), fillvalue=self.default_bump_level
+                ),
                 *zip_longest(self.patch_tags, (), fillvalue=LevelBump.PATCH),
                 *zip_longest(self.minor_tags, (), fillvalue=LevelBump.MINOR),
             ]
@@ -146,13 +151,15 @@ class ConventionalMonorepoParserOptions(ParserOptions):
         }
 
 
-class ConventionalCommitMonorepoParser(CommitParser[ParseResult, ConventionalMonorepoParserOptions]):
-    """"""
-
-    # TODO: Deprecate in lieu of get_default_options()
+class ConventionalCommitMonorepoParser(
+    CommitParser[ParseResult, ConventionalMonorepoParserOptions]
+):
+    # TODO: Remove for v10 compatibility, get_default_options() will be called instead
     parser_options = ConventionalMonorepoParserOptions
 
-    def __init__(self, options: ConventionalMonorepoParserOptions | None = None) -> None:
+    def __init__(
+        self, options: ConventionalMonorepoParserOptions | None = None
+    ) -> None:
         super().__init__(options)
         self.file_selection_filters = []
         self.file_ignore_filters = []
@@ -177,9 +184,15 @@ class ConventionalCommitMonorepoParser(CommitParser[ParseResult, ConventionalMon
                     None,
                     [
                         # Its more likely to be a file within a directory than a specific file, for speed do the directory first
-                        None if str_path.endswith("*") else f"{str_filter.rstrip(os.sep)}{os.sep}**",
+                        (
+                            # Set the filter to the directory and all subdirectories if it is not already globbing
+                            None
+                            if str_path.endswith("*")
+                            else f"{str_filter.rstrip(os.sep)}{os.sep}**"
+                        ),
+                        # Set the filter to the exact file unless its a directory/
                         None if str_path.endswith(os.sep) else str_filter,
-                    ]
+                    ],
                 )
             )
 
@@ -199,14 +212,45 @@ class ConventionalCommitMonorepoParser(CommitParser[ParseResult, ConventionalMon
                 )
             ) from err
 
-        # We add the any scope prefix into the pattern so that we can match it but also we don't include it in the
-        # scope match, which implicitly strips it from being included in the returned scope.
-        self.re_parser = regexp(
+        try:
+            commit_scope_pattern = regexp(
+                r"\(" + self.options.scope_prefix + r"(?P<scope>[^\n]+)\)",
+            )
+        except re.error as err:
+            raise InvalidParserOptions(
+                str.join(
+                    "\n",
+                    [
+                        f"Invalid options for {self.__class__.__name__}",
+                        "Unable to create regular expression from configured scope_prefix.",
+                        "Please check the configured scope_prefix and remove or escape any regular expression characters.",
+                    ],
+                )
+            ) from err
+
+        # This regular expression includes scope prefix into the pattern and forces a scope to be present
+        # PSR will match the full scope but we don't include it in the scope match,
+        # which implicitly strips it from being included in the returned scope.
+        self.strict_scope_pattern = regexp(
             str.join(
                 "",
                 [
                     r"^" + commit_type_pattern.pattern,
-                    r"(?:\(" + self.options.scope_prefix + r"(?P<scope>[^\n]+)\))?",
+                    commit_scope_pattern.pattern,
+                    r"(?P<break>!)?:\s+",
+                    r"(?P<subject>[^\n]+)",
+                    r"(?:\n\n(?P<text>.+))?",  # commit body
+                ],
+            ),
+            flags=re.DOTALL,
+        )
+
+        self.optional_scope_pattern = regexp(
+            str.join(
+                "",
+                [
+                    r"^" + commit_type_pattern.pattern,
+                    r"(?:\((?P<scope>[^\n]+)\))?",
                     r"(?P<break>!)?:\s+",
                     r"(?P<subject>[^\n]+)",
                     r"(?:\n\n(?P<text>.+))?",  # commit body
@@ -234,8 +278,13 @@ class ConventionalCommitMonorepoParser(CommitParser[ParseResult, ConventionalMon
     def get_default_options() -> ConventionalMonorepoParserOptions:
         return ConventionalMonorepoParserOptions()
 
-    def parse_message(self, message: str) -> ParsedMessageResult | None:
-        if not (parsed := self.re_parser.match(message)):
+    def parse_message(
+        self, message: str, strict_scope: bool = False
+    ) -> ParsedMessageResult | None:
+        if not (parsed := self.strict_scope_pattern.match(message)) and strict_scope:
+            return None
+
+        if not parsed and not (parsed := self.optional_scope_pattern.match(message)):
             return None
 
         parsed_break = parsed.group("break")
@@ -284,90 +333,107 @@ class ConventionalCommitMonorepoParser(CommitParser[ParseResult, ConventionalMon
 
     def parse(self, commit: Commit) -> ParseResult:
         """Attempt to parse the commit message with a regular expression into a ParseResult."""
-        # Extract git root from commit
-        git_root = Path(commit.repo.working_tree_dir or commit.repo.working_dir).absolute().resolve()
+        # Multiple scenarios to consider when parsing a commit message [Truth table]:
+        # =======================================================================================================
+        # |    ||                         INPUTS                         ||                                     |
+        # |  # ||------------------------+----------------+--------------||                Result               |
+        # |    || Example Commit Message | Relevant Files | Scope Prefix ||                                     |
+        # |----||------------------------+----------------+--------------||-------------------------------------|
+        # |  1 || type(prefix-cli): msg  |            yes |    "prefix-" ||                        ParsedCommit |
+        # |  2 || type(prefix-cli): msg  |            yes |           "" ||                        ParsedCommit |
+        # |  3 || type(prefix-cli): msg  |             no |    "prefix-" ||                        ParsedCommit |
+        # |  4 || type(prefix-cli): msg  |             no |           "" ||                ParseError[No files] |
+        # |  5 || type(scope-cli): msg   |            yes |    "prefix-" ||                        ParsedCommit |
+        # |  6 || type(scope-cli): msg   |            yes |           "" ||                        ParsedCommit |
+        # |  7 || type(scope-cli): msg   |             no |    "prefix-" ||  ParseError[No files & wrong scope] |
+        # |  8 || type(scope-cli): msg   |             no |           "" ||                ParseError[No files] |
+        # |  9 || type(cli): msg         |            yes |    "prefix-" ||                        ParsedCommit |
+        # | 10 || type(cli): msg         |            yes |           "" ||                        ParsedCommit |
+        # | 11 || type(cli): msg         |             no |    "prefix-" ||  ParseError[No files & wrong scope] |
+        # | 12 || type(cli): msg         |             no |           "" ||                ParseError[No files] |
+        # | 13 || type: msg              |            yes |    "prefix-" ||                        ParsedCommit |
+        # | 14 || type: msg              |            yes |           "" ||                        ParsedCommit |
+        # | 15 || type: msg              |             no |    "prefix-" ||  ParseError[No files & wrong scope] |
+        # | 16 || type: msg              |             no |           "" ||                ParseError[No files] |
+        # | 17 || non-conventional msg   |            yes |    "prefix-" ||          ParseError[Invalid Syntax] |
+        # | 18 || non-conventional msg   |            yes |           "" ||          ParseError[Invalid Syntax] |
+        # | 19 || non-conventional msg   |             no |    "prefix-" ||          ParseError[Invalid Syntax] |
+        # | 20 || non-conventional msg   |             no |           "" ||          ParseError[Invalid Syntax] |
+        # =======================================================================================================
 
-        # Filter the changed files of the commit that match the path filters
-        relevant_changed_files = []
-        for rel_git_path in commit.stats.files.keys():
-            full_path = str(git_root / rel_git_path)
-
-            for pass_filter in self.file_selection_filters:
-                if not (select_file := fnmatch(full_path, pass_filter)):
-                    continue
-
-                # Pass filter matches, so now evaluate if it is supposed to be ignored
-                for ignore_filter in self.file_ignore_filters:
-                    if fnmatch(full_path, ignore_filter):
-                        # Ignore filter matches, so don't select the file
-                        select_file = False
-                        break
-
-                if select_file:
-                    relevant_changed_files.append(rel_git_path)
-                    break
-
-        # Parse the commit message
-        pmsg_result = self.parse_message(str(commit.message))
-
-        # Multiple variants can occur:
-        # 1. commit message is not a valid conventional commit -- ParseError
-        # 2. commit message is a valid conventional commit but not scoped and files are NOT in the directory -- ParseError
-        # 3. commit message is a valid conventional commit but not scoped and files are in the directory -- ParsedCommit
-        # 4. commit message is a valid conventional commit but is scoped and files are NOT in the directory -- ParsedCommit
-        # 5. commit message is a valid conventional commit but is scoped and files are in the directory -- ParsedCommit
-        # If you want to allow unscoped commits, set the scope_prefix to an empty string
-        # Which adds more variants to 2-5.
-
-        if len(relevant_changed_files) == 0:
-            if not pmsg_result:
-                return _logged_parse_error(
-                    commit,
-                    (
-                        # likely a different prefix and files don't match
-                        str.join(" ", [
-                            f"Commit {commit.hexsha[:7]} is not scoped with the scope prefix {self.options.scope_prefix}",
-                            "and has no changed files in the path filter(s)",
-                            f"relative to the git root {git_root}",
-                        ])
-                        if self.options.scope_prefix and self.options.scope_prefix not in commit.message.split("\n", maxsplit=1)[0]
-                        # No prefix was defined, and the files don't match the path filter, and the commit message is not a valid conventional commit
-                        else f"Format Mismatch! Unable to parse commit message: {commit.message!r}"
-                    )
-                )
-
-            if not self.options.scope_prefix:
-                # No prefix was defined, and the files don't match the path filter, but the commit message is a valid conventional commit
-                return _logged_parse_error(
-                    commit,
-                    str.join(" ", [
-                        f"Commit {commit.hexsha[:7]} has no changed files in the path filter(s)",
-                        f"relative to the git root {git_root}",
-                    ])
-                )
-
-        if not pmsg_result:
-            return _logged_parse_error(
-                commit,
-                (
-                    (
-                        # you have defined a scope prefix and the result fails to match -- ParseError
-                        f"Commit {commit.hexsha[:7]} scope does not match scope prefix {self.options.scope_prefix}"
-                    )
-                    if self.options.scope_prefix and self.options.scope_prefix not in commit.message.split("\n")[0]
-                    # The commit message is not a valid conventional commit
-                    else f"Format Mismatch! Unable to parse commit message: {commit.message!r}"
-                )
-            )
-
-        logger.debug(
-            "commit %s introduces a %s level_bump",
-            commit.hexsha[:8],
-            pmsg_result.bump,
+        # Initial Logic Flow:
+        # [1] When there are no relevant files and a scope prefix is defined, we enforce a strict scope
+        # [2] When there are no relevant files and no scope prefix is defined, we parse scoped or unscoped commits
+        # [3] When there are relevant files, we parse scoped or unscoped commits regardless of any defined prefix
+        has_relevant_changed_files = self._has_relevant_changed_files(commit)
+        strict_scope = bool(
+            not has_relevant_changed_files and self.options.scope_prefix
+        )
+        pmsg_result = self.parse_message(
+            message=str(commit.message),
+            strict_scope=strict_scope,
         )
 
-        return ParsedCommit.from_parsed_message_result(commit, pmsg_result)
+        if pmsg_result and (has_relevant_changed_files or strict_scope):
+            logger.debug(
+                "commit %s introduces a %s level_bump",
+                commit.hexsha[:8],
+                pmsg_result.bump,
+            )
 
+            return ParsedCommit.from_parsed_message_result(commit, pmsg_result)
+
+        if pmsg_result and not has_relevant_changed_files:
+            return _logged_parse_error(
+                commit,
+                f"Commit {commit.hexsha[:7]} has no changed files matching the path filter(s)",
+            )
+
+        if strict_scope and self.parse_message(str(commit.message), strict_scope=False):
+            return _logged_parse_error(
+                commit,
+                str.join(
+                    " and ",
+                    [
+                        f"Commit {commit.hexsha[:7]} has no changed files matching the path filter(s)",
+                        f"the scope does not match scope prefix '{self.options.scope_prefix}'",
+                    ],
+                ),
+            )
+
+        return _logged_parse_error(
+            commit,
+            f"Format Mismatch! Unable to parse commit message: {commit.message!r}",
+        )
+
+    def _has_relevant_changed_files(self, commit: Commit) -> bool:
+        # Extract git root from commit
+        git_root = (
+            Path(commit.repo.working_tree_dir or commit.repo.working_dir)
+            .absolute()
+            .resolve()
+        )
+
+        # Check if the changed files of the commit that match the path filters
+        for full_path in iter(
+            str(git_root / rel_git_path) for rel_git_path in commit.stats.files
+        ):
+            # Check if the filepath matches any of the file selection filters
+            if not any(
+                fnmatch(full_path, select_filter)
+                for select_filter in self.file_selection_filters
+            ):
+                continue
+
+            # Pass filter matches, so now evaluate if it is supposed to be ignored
+            if not any(
+                fnmatch(full_path, ignore_filter)
+                for ignore_filter in self.file_ignore_filters
+            ):
+                # No ignore filter matched, so it must be a relevant file
+                return True
+
+        return False
 
     def _commit_body_components_separator(
         self, accumulator: dict[str, list[str]], text: str
