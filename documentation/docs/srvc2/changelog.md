@@ -4,89 +4,35 @@ This document includes all changes made to the `srvc2` module per version.
 
 <!-- version list -->
 
-## v1.6.2 (2025-01-07)
+## v1.2.0 (2025-01-17)
 
 ### Bug Fixes
 
-- That was strange, let's try one more bug fix ([`27b4a67`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/27b4a6792c0e305c0ba3b667c084dfb1ce856575))
-    - Another double release
+- Fix for service 2 ([`75d46a9`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/75d46a9f2f99059986b7d947b07628bf85d3078d))
+    - necessary fix
+
+### Features
+
+- Feature release for service 1 ([`c8b479d`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/c8b479dbdb43bf800000b97ba20dcc120c0bce08))
+    - Good feature!
 
 
-## v1.6.1 (2025-01-07)
+## v1.1.1 (2025-01-17)
 
 ### Bug Fixes
 
-- Test another double release ([`dd500a8`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/dd500a820e6191f57a97d2c068a8309255846808))
-    - this comment should be reflected in both changelogs
+- Fix for service 2 ([`7b30779`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/7b307799afb199445702742f98285d3ac47ec525))
+    - Great fix!
 
 
-## v1.6.0 (2025-01-07)
-
-### Features
-
-- Test double release ([`79aab0a`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/79aab0ac422828e38ee8ebc0b112a40d1a2a755f))
-    - This is double release
-
-
-## v1.5.0 (2025-01-07)
+## v1.1.0 (2025-01-16)
 
 ### Features
 
-- Another test, with double bullet and jira ticket number ([`67b611c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/67b611cc81a970d68ddd568c8aab4d9912a181d6))
-    - test bullet
+- Test release service 2 ([`9f87f9f`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/9f87f9f500f12167791f9167f26d0b4f3d0c25c0))
+    - Good test for service 2
 
 
-## v1.4.0 (2025-01-07)
-
-### Features
-
-- Another feature, single new line this time ([`76e7bf7`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/76e7bf796d81a0016cef0e3a6e4c314193dae162))
-
-- Let's try one more time, with double new line ([`540de78`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/540de78211c65f6b8de5f51afbba727f50028972))
-    - test bullet
-
-
-## v1.3.0 (2025-01-06)
-
-### Features
-
-- Let's give it one more try ([`e253a8c`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/e253a8c6c826555ec9d2213590dccfe94fe049f5))
-
-
-## v1.0.0 (2025-01-06)
-
-- Initial Release
-
-## v1.2.0 (2025-01-06)
-
-### Chores
-
-- Fix comments in configuration ([`0a874b5`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/0a874b5b7a86f5c10b0403d670457d895c1411ea))
-
-### Documentation
-
-- **changelog**: Add custom header to changelog ([`0db541d`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/0db541df59f18f0c14f55562a83e4af9be5e40c9))
-
-### Features
-
-- **version**: Add version variable to service module ([`a526b84`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/a526b84af2e2138abd2545b04cf5bb331bf20079))
-
-
-## v1.1.0 (2025-01-05)
-
-### Chores
-
-- **scripts**: Add release automation script ([`6359724`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/635972414dc98ace403bf39a279bd629a3518726))
-
-### Documentation
-
-- **readme**: Update readme for service 2 ([`c88a57c`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/c88a57c1593725080a9dd05dfd68096cd0d49777))
-
-### Features
-
-- **cli**: Add run script for service 2 ([`6b8bcea`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/6b8bcea3bfb4f53cd243147d4bccd5d39b980584))
-
-
-## v1.0.0 (2025-01-05)
+## v1.0.0 (2025-01-16)
 
 - Initial Release

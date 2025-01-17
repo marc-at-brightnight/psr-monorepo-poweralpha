@@ -4,52 +4,21 @@ This document includes all changes made to the `srvc1` module per version.
 
 <!-- version list -->
 
-## v1.3.1 (2025-01-07)
-
-### Bug Fixes
-
-- That was strange, let's try one more bug fix ([`27b4a67`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/27b4a6792c0e305c0ba3b667c084dfb1ce856575))
-    - Another double release
-
-
-## v1.3.0 (2025-01-07)
-
-### Bug Fixes
-
-- Test another double release ([`dd500a8`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/dd500a820e6191f57a97d2c068a8309255846808))
-    - this comment should be reflected in both changelogs
-
-
-## v1.2.0 (2025-01-06)
-
-### Chores
-
-- Fix comments in configuration ([`0a874b5`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/0a874b5b7a86f5c10b0403d670457d895c1411ea))
-
-### Documentation
-
-- **changelog**: Add custom header to changelog ([`f194cb3`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/f194cb335b2bf8c1b8391b9f379735e422e4ea34))
+## v1.2.0 (2025-01-17)
 
 ### Features
 
-- **version**: Add version variable to service module ([`5d24983`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/5d24983d88b76e2d1c51706bb1fd5c24f66baf88))
+- Feature release for service 1 ([`c8b479d`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/c8b479dbdb43bf800000b97ba20dcc120c0bce08))
+    - Good feature!
 
 
-## v1.1.0 (2025-01-05)
+## v1.0.1 (2025-01-16)
 
-### Chores
+### Bug Fixes
 
-- **scripts**: Add release automation script ([`db7138b`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/db7138b3be7704620ca1ecdd6fa9eb14edd3f5c0))
+- Test service 1 release ([`d50e904`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/d50e9044b8dbd01bda80bd1d0cd9271926b90d8f))
+    - This is a good test for service 1
 
-### Documentation
-
-- **readme**: Update readme for service 1 ([`8e288f6`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/8e288f65a9e5ce77cdda6506176263aa0cba4966))
-
-### Features
-
-- **cli**: Add run script for service 1 ([`a3f8d44`](https://github.com/codejedi365/psr-monorepo-poweralpha/commit/a3f8d44c89450c52088e3f8603829c6326b938b5))
-
-
-## v1.0.0 (2025-01-05)
+## v1.0.0 (2025-01-16)
 
 - Initial Release
