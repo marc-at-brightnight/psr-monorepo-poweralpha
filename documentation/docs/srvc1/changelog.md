@@ -4,6 +4,14 @@ This document includes all changes made to the `srvc1` module per version.
 
 <!-- version list -->
 
+## v1.2.0 (2025-01-17)
+
+### Features
+
+- Feature release for service 1 ([`c8b479d`](https://github.com/marc-at-brightnight/psr-monorepo-poweralpha/commit/c8b479dbdb43bf800000b97ba20dcc120c0bce08))
+    - Good feature!
+
+
 ## v1.0.1 (2025-01-16)
 
 ### Bug Fixes
